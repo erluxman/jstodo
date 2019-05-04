@@ -1,0 +1,38 @@
+.container{
+    margin: 30px;
+}
+
+.done-mark{
+    font-size: 30px;
+    color: aqua;
+    margin: 5px;
+}
+
+.not-done-mark{
+    font-size: 30px;
+    color: gray;
+    margin: 5px;
+}
+
+.done-work-text{
+    font-size: 20px;
+    min-width: 200px;
+    max-width: 200px;
+    color: darkslategrey;
+}
+
+.not-done-work-text{
+    font-size: 20px;
+    min-width: 200px;
+    max-width: 200px;
+    color: black;
+}
+
+.deleted-task{
+    font-size: 30px;
+    color: aqua;
+}
+.not-deleted-task{
+    font-size: 30px;
+    color: aqua;
+}
