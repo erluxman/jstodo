@@ -7,29 +7,57 @@ class Todo {
 
 
 class DB {
+
+    static getAlltasks() {
+
+        let tasks;
+        if (localStorage.getItem('tasks') === null) {
+            tasks = []
+        } else {
+            tasks = JSON.parse(localStorage.getItem('tasks'))
+        }
+
+        return tasks;
+    }
     static getDoneTasks() {
 
-        return [
-            { work: "Buy an Acre of Land", done: true },
-            { work: "Buy A car", done: true },
-            { work: "Make new Home", done: true },
-        ]
+        return DB.getAlltasks().filter(item => {
+            return item.done === true
+        })
 
     }
 
     static getNotDoneTasks() {
-        return [
-            { work: "Buy macbook", done: true },
-            { work: "Buy kindle", done: true },
-            { work: "Start Learning Web", done: true },
-        ]
+        return DB.getAlltasks().filter((item) => {
+            return item.done === false
+        })
     }
     static addTask(task) {
-
+        const tasks = DB.getAlltasks()
+        tasks.push(task)
+        localStorage.setItem('tasks', JSON.stringify(tasks))
     }
 
-    static deleteTask(event) {
+    static deleteTask(work) {
+        const tasks = DB.getAlltasks()
+        tasks.forEach((task, index) => {
+            if (work == task.work) {
+                tasks.splice(index, 1)
+            }
+        })
+        localStorage.setItem('tasks', JSON.stringify(tasks))
+    }
 
+    static updateTask(work, completed) {
+        console.log("task to update "+work);
+        const tasks = DB.getAlltasks()
+        tasks.forEach((task,index) => {
+            if (work == task.work) {
+                tasks.splice(index, 1)
+            }
+        })
+        tasks.push(new Todo(work,completed))
+        localStorage.setItem('tasks', JSON.stringify(tasks))
     }
 }
 
@@ -61,7 +89,6 @@ class UI {
     }
     static displayDoneTasks() {
         DB.getDoneTasks().forEach((task) => UI.addDoneTask(task))
-
     }
 
     static addTask(task) {
@@ -72,22 +99,32 @@ class UI {
 
     static removeTask(work) {
         console.log(work)
-        if(work.classList.contains('delete-task')){
+        if (work.classList.contains('delete-task')) {
             work.parentElement.parentElement.remove()
+            UI.showAlert("Successsfully Deleted", "danger")
         }
     }
 
     static markAsDone(work) {
+        if (work.classList.contains('not-done-mark')) {
+            work.classList.remove('not-done-mark')
+            work.classList.add('done-mark')
+            UI.showAlert("Completed", "success")
+        }
     }
 
     static markAsNotDone(work) {
-
+        if (work.classList.contains('done-mark')) {
+            work.classList.remove('done-mark')
+            work.classList.add('not-done-mark')
+            UI.showAlert("Undo Complete", "success")
+        }
     }
     static clearInput() {
         document.querySelector("#todo-field").value = ""
     }
 
-    static showAlert(message,className) {
+    static showAlert(message, className) {
         const div = document.createElement('div');
         div.className = `alert alert-${className}`;
         div.appendChild(document.createTextNode(message))
@@ -110,7 +147,8 @@ document.querySelector("#todo-form").addEventListener("submit", (event) => {
     const work = document.querySelector("#todo-field").value
     const todo = new Todo(work, false)
     UI.addNotDonetask(todo)
-    UI.showAlert("Successfully Added","success")
+    DB.addTask(todo);
+    UI.showAlert("Successfully Added", "success")
     UI.clearInput()
 })
 
@@ -118,7 +156,18 @@ document.querySelector("#todo-list").addEventListener('click', handleDelete)
 document.querySelector("#done-list").addEventListener('click', handleDelete)
 
 function handleDelete(e) {
-    UI.removeTask(e.target)
-    UI.showAlert("Successsfully Deleted", "danger")
-    Store.removeBook(e.target.parentElement.previousElementSibling.textContent)
+    const classList = e.target.classList
+    if (classList.contains('delete-task')) {
+        UI.removeTask(e.target)
+        DB.deleteTask(e.target.parentElement.previousElementSibling.textContent)
+    } else if (classList.contains('done-mark')) {
+        UI.markAsNotDone(e.target)
+        DB.updateTask(e.target.parentElement.previousElementSibling.previousElementSibling.textContent,false)
+    } else if (classList.contains('not-done-mark')) {
+        UI.markAsDone(e.target)
+        DB.updateTask(e.target.parentElement.previousElementSibling.previousElementSibling.textContent,true)
+    }
+    else {
+
+    }
 }
