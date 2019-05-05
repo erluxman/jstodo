@@ -13,22 +13,23 @@
 </head>
 
 <body>
+    <div id="container" class="container mt-4">
 
-    <form class="container" id="todo-form">
-        <div id="add-todo-bar">
-            <label for="todo-field"> Type Your TODO</label>
-            <input type="text" id="todo-field" class="form-control">
-        </div>
-        <input type="submit" value="Add  " id="submit" class="btn btn-primary btn-block">
-    </form>
+        <form class="container" id="todo-form">
+            <div id="add-todo-bar">
+                <label for="todo-field"> Type Your TODO</label>
+                <input type="text" id="todo-field" class="form-control">
+            </div>
+            <input type="submit" value="Add  " id="submit" class="btn btn-primary btn-block">
+        </form>
 
-    <table class="container">
-        <thead>
+        <table class="container" id="todo-table">
+            <thead>
 
-        </thead>
-        <tbody id="todo-list">
-        </tbody>
-        </div>
+            </thead>
+            <tbody id="todo-list">
+            </tbody>
+    </div>
     </table>
     <table class="container">
         <thead>
@@ -39,6 +40,7 @@
         </div>
     </table>
 
+    </div>
     <script src="js/index.js"></script>
 </body>
 

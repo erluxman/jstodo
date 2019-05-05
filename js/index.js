@@ -28,7 +28,7 @@ class DB {
 
     }
 
-    static deleteTask(work) {
+    static deleteTask(event) {
 
     }
 }
@@ -43,7 +43,7 @@ class UI {
         const row = document.createElement('tr')
         row.innerHTML = `
         <td class="not-done-work-text">${task.work}</td>
-        <td><i class="far fa-trash-alt not-deleted-task"></i></td>
+        <td><i class="far fa-trash-alt delete-task"></i></td>
         <td><i class="far fa-check-circle not-done-mark"></i></td>
         `
         list.appendChild(row)
@@ -54,7 +54,7 @@ class UI {
         const row = document.createElement('tr')
         row.innerHTML = `
         <td class="done-work-text">${task.work}</td>
-        <td><i class="far fa-trash-alt not-deleted-task"></i></td>
+        <td><i class="far fa-trash-alt delete-task"></i></td>
         <td><i class="far fa-check-circle done-mark"></i></td>
         `
         list.appendChild(row)
@@ -71,7 +71,10 @@ class UI {
     }
 
     static removeTask(work) {
-
+        console.log(work)
+        if(work.classList.contains('delete-task')){
+            work.parentElement.parentElement.remove()
+        }
     }
 
     static markAsDone(work) {
@@ -81,11 +84,19 @@ class UI {
 
     }
     static clearInput() {
-        document.querySelector("#todo-field").value=""
+        document.querySelector("#todo-field").value = ""
     }
 
-    static showAlert() {
+    static showAlert(message,className) {
+        const div = document.createElement('div');
+        div.className = `alert alert-${className}`;
+        div.appendChild(document.createTextNode(message))
+        const container = document.querySelector('.container');
+        const form = document.querySelector("#todo-table")
+        container.insertBefore(div, form)
 
+        //Vanish in 3 seconds
+        setTimeout(() => document.querySelector('.alert').remove(), 3000)
     }
 }
 
@@ -99,5 +110,15 @@ document.querySelector("#todo-form").addEventListener("submit", (event) => {
     const work = document.querySelector("#todo-field").value
     const todo = new Todo(work, false)
     UI.addNotDonetask(todo)
+    UI.showAlert("Successfully Added","success")
     UI.clearInput()
 })
+
+document.querySelector("#todo-list").addEventListener('click', handleDelete)
+document.querySelector("#done-list").addEventListener('click', handleDelete)
+
+function handleDelete(e) {
+    UI.removeTask(e.target)
+    UI.showAlert("Successsfully Deleted", "danger")
+    Store.removeBook(e.target.parentElement.previousElementSibling.textContent)
+}

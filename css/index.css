@@ -10,7 +10,7 @@
 
 .not-done-mark{
     font-size: 30px;
-    color: gray;
+    color: rgb(15, 13, 13);
     margin: 5px;
 }
 
@@ -28,11 +28,7 @@
     color: black;
 }
 
-.deleted-task{
-    font-size: 30px;
-    color: aqua;
-}
-.not-deleted-task{
+.delete-task{
     font-size: 30px;
     color: aqua;
 }
