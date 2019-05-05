@@ -13,19 +13,19 @@
 </head>
 
 <body>
-    <div id="container" class="container mt-4">
+    <div id="container" class="container">
+        <div id="message-dialog">
+        </div>
 
         <form class="container" id="todo-form">
             <div id="add-todo-bar">
-                <label for="todo-field"> Type Your TODO</label>
+                <h4 class="type-your-todo">Type Your TODO</h2>
                 <input type="text" id="todo-field" class="form-control">
             </div>
             <input type="submit" value="Add  " id="submit" class="btn btn-primary btn-block">
         </form>
 
-        <div id="message-dialog">
-        </div>
-        <h2 class="task-heading-done">Not Done Yet</h2>
+        <h2 class="task-heading-done container">Not Done Yet</h2>
         <table class="container" id="todo-table">
             <thead>
 
@@ -34,7 +34,7 @@
             </tbody>
         </table>
 
-        <h2 class="task-heading-not-done">Completed</h2>
+        <h2 class="task-heading-not-done container">Completed</h2>
         <table class="container">
             <thead>
 

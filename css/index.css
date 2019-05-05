@@ -2,16 +2,28 @@
     margin: 30px;
 }
 
+tbody{
+    margin-left: 50px;
+}
 .done-mark{
     font-size: 30px;
     color: aqua;
     margin: 5px;
 }
 
+#message-dialog{
+    min-height: 50px;
+    max-height: 50px;
+}
+
 .not-done-mark{
     font-size: 30px;
     color: rgb(15, 13, 13);
     margin: 5px;
+}
+
+.hidden{
+    visibility: hidden;
 }
 
 .done-work-text{

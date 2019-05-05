@@ -49,14 +49,14 @@ class DB {
     }
 
     static updateTask(work, completed) {
-        console.log("task to update "+work);
+        console.log("task to update " + work);
         const tasks = DB.getAlltasks()
-        tasks.forEach((task,index) => {
+        tasks.forEach((task, index) => {
             if (work == task.work) {
                 tasks.splice(index, 1)
             }
         })
-        tasks.push(new Todo(work,completed))
+        tasks.push(new Todo(work, completed))
         localStorage.setItem('tasks', JSON.stringify(tasks))
     }
 }
@@ -91,49 +91,26 @@ class UI {
         DB.getDoneTasks().forEach((task) => UI.addDoneTask(task))
     }
 
-    static addTask(task) {
-        const books = Store.getBooks()
-        books.push(book)
-        localStorage.setItem('books', JSON.stringify(books))
-    }
-
     static removeTask(work) {
         console.log(work)
-        if (work.classList.contains('delete-task')) {
-            work.parentElement.parentElement.remove()
-            UI.showAlert("Successsfully Deleted", "danger")
-        }
+        work.parentElement.parentElement.remove()
     }
 
-    static markAsDone(work) {
-        if (work.classList.contains('not-done-mark')) {
-            work.classList.remove('not-done-mark')
-            work.classList.add('done-mark')
-            UI.showAlert("Completed", "success")
-        }
-    }
-
-    static markAsNotDone(work) {
-        if (work.classList.contains('done-mark')) {
-            work.classList.remove('done-mark')
-            work.classList.add('not-done-mark')
-            UI.showAlert("Undo Complete", "success")
-        }
-    }
     static clearInput() {
         document.querySelector("#todo-field").value = ""
     }
 
     static showAlert(message, className) {
-        const div = document.createElement('div');
-        div.className = `alert alert-${className}`;
-        div.appendChild(document.createTextNode(message))
-        const container = document.querySelector('.container');
-        const form = document.querySelector("#todo-table")
-        container.insertBefore(div, form)
-
-        //Vanish in 3 seconds
-        setTimeout(() => document.querySelector('.alert').remove(), 3000)
+        const alert = document.querySelector('#message-dialog');
+        alert.className = `alert alert-${className}`;
+        const messageChild = document.createTextNode(message);
+        alert.appendChild(messageChild)
+        setTimeout(
+            () => {
+                alert.removeChild(messageChild);
+                alert.className = `hidden`
+            }
+            , 1500)
     }
 }
 
@@ -160,12 +137,17 @@ function handleDelete(e) {
     if (classList.contains('delete-task')) {
         UI.removeTask(e.target)
         DB.deleteTask(e.target.parentElement.previousElementSibling.textContent)
+        UI.showAlert("Deleted", "danger")
     } else if (classList.contains('done-mark')) {
-        UI.markAsNotDone(e.target)
-        DB.updateTask(e.target.parentElement.previousElementSibling.previousElementSibling.textContent,false)
+        UI.removeTask(e.target)
+        UI.addNotDonetask(new Todo(e.target.parentElement.previousElementSibling.previousElementSibling.textContent, true))
+        DB.updateTask(e.target.parentElement.previousElementSibling.previousElementSibling.textContent, false)
+        UI.showAlert("Undo Complete", "success")
     } else if (classList.contains('not-done-mark')) {
-        UI.markAsDone(e.target)
-        DB.updateTask(e.target.parentElement.previousElementSibling.previousElementSibling.textContent,true)
+        UI.removeTask(e.target)
+        UI.addDoneTask(new Todo(e.target.parentElement.previousElementSibling.previousElementSibling.textContent, true))
+        DB.updateTask(e.target.parentElement.previousElementSibling.previousElementSibling.textContent, true)
+        UI.showAlert("Completed", "success")
     }
     else {
 
