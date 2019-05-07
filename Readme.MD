@@ -1,3 +1,3 @@
-Simple TODO application in Javascript 
+# Simple TODO application in Javascript
 
-![This is how the app looks like] (screenshot.png?raw=true "Title")
+![The app looks like this](screenshot.png?raw=true "Title")
